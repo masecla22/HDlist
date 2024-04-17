@@ -3,7 +3,7 @@ import { Box, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper,
 import React, { useEffect, useState } from "react"
 import searchForItems from "../../search/ItemSearch"
 import ItemImage, { ImageSize } from "../adder/ItemImage"
-import { MultiplierOrPrice, UserItemListItemDefinition } from "../adder/ItemList"
+import { MultiplierOrPrice } from "../adder/ItemList"
 import fuzzysort from "fuzzysort"
 import { useSelectedListProvider } from "../../contexts/SelectedListProvider"
 

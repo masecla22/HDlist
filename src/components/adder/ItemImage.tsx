@@ -21,7 +21,7 @@ function ItemImageCustomSize(props: {
 
     // Find the smallest value in the enum that is greater than the size
     let closestSize = 32;
-    while(closestSize < size && clowsestSize < 256) 
+    while(closestSize < size && closestSize < 256) 
         closestSize *= 2;
 
     // Return the image from the closestSize with a modified height and width to match the size
