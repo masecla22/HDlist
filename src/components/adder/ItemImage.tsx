@@ -10,7 +10,7 @@ function ItemImage(props: {
     size: ImageSize,
 }) {
     const { name, size } = props
-    return <img src={`/assets/images_${size}/${name}.png`} alt={props.name} />
+    return <img src={`assets/images_${size}/${name}.png`} alt={props.name} />
 }
 
 function ItemImageCustomSize(props: {
@@ -25,7 +25,7 @@ function ItemImageCustomSize(props: {
         closestSize *= 2;
 
     // Return the image from the closestSize with a modified height and width to match the size
-    return <img src={`/assets/images_${closestSize}/${name}.png`} alt={props.name} height={size} width={size} />
+    return <img src={`assets/images_${closestSize}/${name}.png`} alt={props.name} height={size} width={size} />
 }
 
 export default ItemImage
