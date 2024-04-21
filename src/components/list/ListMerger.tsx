@@ -131,7 +131,7 @@ function ListMerger(props: {
                 from {sourceLists.length} lists into {targetList} {deleteSourceLists ? "and delete the original lists" : ""}
                 <br />
                 <br />
-                Prices will be kept from target list if possible, otherwise from whichever list the comes first.
+                Prices will be kept from target list if possible, otherwise from whichever list comes first.
             </Box>
         </DialogContent>
         <DialogActions>
