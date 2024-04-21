@@ -58,6 +58,21 @@ function SelectedListProvider(props: { children: React.ReactNode }) {
         } else if (Object.keys(availableLists).length === 0) {
             setAvailableLists({ 'Default List': createNewList('Default List') });
         }
+
+        // Add a listener for local storage changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'userLists') {
+                const storedLists = localStorage.getItem('userLists');
+                if (storedLists) {
+                    setAvailableLists(JSON.parse(storedLists));
+                }
+            } else if (e.key === 'selectedList') {
+                const storedSelectedList = localStorage.getItem('selectedList');
+                if (storedSelectedList) {
+                    setSelectedList(storedSelectedList);
+                }
+            }
+        });
     }, []);
 
     useEffect(() => {
