@@ -1,7 +1,7 @@
-import { Add, CallMerge, Delete, Merge, Refresh } from "@mui/icons-material";
+import { Add, CallMerge, Delete } from "@mui/icons-material";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
-import { useSelectedListProvider } from "../../contexts/SelectedListProvider";
 import { useState } from "react";
+import { useSelectedListProvider } from "../../contexts/SelectedListProvider";
 import ListMerger from "./ListMerger";
 
 function NewListDialog(props: {
@@ -40,13 +40,13 @@ function NewListDialog(props: {
 }
 
 function ListSelector() {
-    const { selectedList, availableLists, setSelectedList, setAvailableLists } = useSelectedListProvider();
+    const { selectedList, getAvailableLists, setSelectedList, setAvailableLists } = useSelectedListProvider();
     const [newListDialogOpen, setNewListDialogOpen] = useState<boolean>(false);
     const [mergerDialogOpen, setMergerDialogOpen] = useState<boolean>(false);
 
     return <>
         <NewListDialog open={newListDialogOpen} onClose={() => setNewListDialogOpen(false)} onNewList={(name) => {
-            setAvailableLists({ ...availableLists, [name]: { name, items: [] } });
+            setAvailableLists({ ...getAvailableLists(), [name]: { name, items: [] } });
             setSelectedList(name);
         }} />
         <Box display="flex" gap={2} alignItems="center">
@@ -65,7 +65,7 @@ function ListSelector() {
                         value={selectedList}
                         onChange={(e) => setSelectedList(e.target.value!)}
                     >
-                        {Object.values(availableLists).map(list => (
+                        {Object.values(getAvailableLists()).map(list => (
                             <MenuItem key={list.name} value={list.name}>{list.name}</MenuItem>
                         ))}
                     </Select>
@@ -75,12 +75,12 @@ function ListSelector() {
                 <IconButton onClick={() => setNewListDialogOpen(true)} >
                     <Add />
                 </IconButton>
-                {availableLists && Object.keys(availableLists).length > 1 &&
+                {getAvailableLists() && Object.keys(getAvailableLists()).length > 1 &&
                     <>
                         <Tooltip title="Delete List">
                             <IconButton
                                 onClick={() => {
-                                    const newAvailableLists = { ...availableLists };
+                                    const newAvailableLists = { ...getAvailableLists() };
                                     delete newAvailableLists[selectedList!];
                                     setAvailableLists(newAvailableLists);
                                     setSelectedList(Object.keys(newAvailableLists)[0]);
