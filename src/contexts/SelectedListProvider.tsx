@@ -3,7 +3,7 @@ import { UserItemList, UserItemListItemDefinition } from "../components/adder/It
 
 type SelectedListContextType = {
     selectedList: string | null;
-    availableLists: Record<string, UserItemList>;
+    getAvailableLists: () => Record<string, UserItemList>;
     getSelectedList: () => UserItemList | null;
     readonly setSelectedList: (list: string) => void;
     readonly setAvailableLists: (lists: Record<string, UserItemList>) => void;
@@ -14,7 +14,7 @@ type SelectedListContextType = {
 
 const SelectedListContext = createContext<SelectedListContextType>({
     selectedList: null,
-    availableLists: {},
+    getAvailableLists: () => ({}),
     getSelectedList: () => null,
     setSelectedList: () => { },
     setAvailableLists: () => { },
@@ -45,35 +45,39 @@ function SelectedListProvider(props: { children: React.ReactNode }) {
         'Default List': createNewList('Default List')
     });
 
-    // Check if there's at least one list 
-
     useEffect(() => {
         const storedLists = localStorage.getItem('userLists');
+        const storedSelectedList = localStorage.getItem('selectedList');
+        if (!storedSelectedList) setSelectedList('Default List');
+
+        if (storedSelectedList) {
+            setSelectedList(storedSelectedList);
+        }
         if (storedLists) {
             setAvailableLists(JSON.parse(storedLists));
-        }
-
-        if (Object.keys(availableLists).length === 0) {
+        } else if (Object.keys(availableLists).length === 0) {
             setAvailableLists({ 'Default List': createNewList('Default List') });
         }
     }, []);
 
     useEffect(() => {
-        // if (!selectedList && Object.keys(availableLists).length > 0) {
-        //     setSelectedList(Object.keys(availableLists)[0]);
-        // }
-    }, [availableLists]);
+        if (Object.keys(availableLists).length <= 0)
+            return;
 
-    useEffect(() => {
+        // Make sure you don't save the default value, 
+        if (Object.keys(availableLists).length === 1 && Object.keys(availableLists)[0] === 'Default List' && !availableLists['Default List'].items.length)
+            return;
+
         localStorage.setItem('userLists', JSON.stringify(availableLists));
-    }, [availableLists]);
+        localStorage.setItem('selectedList', selectedList || 'Default List');
+    }, [availableLists, selectedList]);
 
     const handleSetSelectedList = (list: string) => setSelectedList(list);
 
     return (
         <SelectedListContext.Provider value={{
             selectedList,
-            availableLists,
+            getAvailableLists: () => availableLists,
             setAvailableLists,
             setSelectedList: handleSetSelectedList,
             getSelectedList: () => selectedList ? availableLists[selectedList] : null,
