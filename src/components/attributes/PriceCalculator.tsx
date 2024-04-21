@@ -19,7 +19,7 @@ function calculatePrice(list: UserItemList) {
         const isMultiplier = price.includes('x') || price.includes('X');
 
         const pricePer = isMultiplier ?
-            parseFloat(priceStr) * itemPrices[item.item] :
+            parseFloat(priceStr) * itemPrices[item.item].price :
             parseFloat(priceStr);
 
         result += pricePer * item.amount;
@@ -51,7 +51,7 @@ function getPriceDisplay(list: UserItemList) {
         </Box>
         {itemsToConvertTo.map((item, index) => <Box key={index} display="flex" alignItems="center">
             <Typography variant="h5" mr={0.5}>
-                {item}: {(price / itemPrices[item]).toFixed(2)}
+                {item}: {(price / itemPrices[item].price).toFixed(2)}
             </Typography>
             <ItemImageCustomSize name={item} size={20} />
         </Box>)}
