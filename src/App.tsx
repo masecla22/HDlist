@@ -1,5 +1,5 @@
 import { DarkMode, LightMode } from "@mui/icons-material";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useContext } from "react";
 import "./App.css";
 import ItemList from "./components/adder/ItemList";
@@ -8,6 +8,7 @@ import ListSelector from "./components/list/ListSelector";
 import { ColorModeContext } from "./contexts/ColorModeProvider";
 import ListDisplayer from "./components/list/ListDisplayer";
 import PriceCalculator from "./components/attributes/PriceCalculator";
+import Credits from "./components/Credits";
 
 function App() {
   const { toggleColorMode, currentTheme } = useContext(ColorModeContext);
@@ -15,11 +16,16 @@ function App() {
   return (
     <>
       <Box position="absolute" top={10} right={10} zIndex={10}>
-        <IconButton onClick={toggleColorMode} >
-          {currentTheme === "light" ?
-            <DarkMode /> :
-            <LightMode />}
-        </IconButton>
+        <Box>
+          <Credits />
+          <Tooltip title="Toggle Theme">
+            <IconButton onClick={toggleColorMode} >
+              {currentTheme === "light" ?
+                <DarkMode /> :
+                <LightMode />}
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
       <Box height="100vh" display="flex">
         <Box flex="0 0 50%" p={2}>
