@@ -26,8 +26,9 @@ function ItemListItem(props: UserItemListItemDefinition) {
 }
 
 function ItemList() {
-    const { getSelectedList } = useSelectedListProvider();
+    const { getSelectedList, addItemToList } = useSelectedListProvider();
     const { items } = getSelectedList()!;
+
     return <Box>
         <Grid container>
             {items.map((item, index) => {
@@ -36,20 +37,31 @@ function ItemList() {
                         <ItemListItem {...item} />
                     </Grid>
                     <Grid item xs={2} display="flex" alignItems="center">
-                        <EditableAmountLabel amount={item.amount} onChange={() => { }} />
+                        <EditableAmountLabel amount={item.amount} onChange={(newAmount) => {
+                            addItemToList({ ...item, amount: newAmount }, false);
+                        }} />
                     </Grid>
                     <Grid item xs={4} display="flex" alignItems="center" justifyContent="center">
-                        <EditablePriceLabel price={item.multiplierOrPrice} onChange={() => { }} />
+                        <EditablePriceLabel price={item.multiplierOrPrice} onChange={(newPrice) => {
+                            console.log(newPrice);
+                            addItemToList({ ...item, multiplierOrPrice: newPrice }, false);
+                        }} />
                     </Grid>
                     <Grid item xs={2} display="flex" alignItems="center" justifyContent="flex-end">
                         <Box>
-                            <IconButton>
+                            <IconButton onClick={() => {
+                                addItemToList({ ...item, amount: item.amount + 1 }, false);
+                            }}>
                                 <Add />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => {
+                                addItemToList({ ...item, amount: item.amount - 1 }, false);
+                            }}>
                                 <Remove />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => {
+                                addItemToList({ ...item, amount: 0 }, false);
+                            }}>
                                 <Delete />
                             </IconButton>
                         </Box>
@@ -58,7 +70,6 @@ function ItemList() {
             })}
         </Grid>
     </Box>
-
 }
 
 export default ItemList
