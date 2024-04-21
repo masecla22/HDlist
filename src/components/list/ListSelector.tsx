@@ -1,7 +1,8 @@
-import { Add, Delete } from "@mui/icons-material";
+import { Add, CallMerge, Delete, Merge, Refresh } from "@mui/icons-material";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Tooltip, Typography } from "@mui/material";
 import { useSelectedListProvider } from "../../contexts/SelectedListProvider";
 import { useState } from "react";
+import ListMerger from "./ListMerger";
 
 function NewListDialog(props: {
     open: boolean,
@@ -41,6 +42,7 @@ function NewListDialog(props: {
 function ListSelector() {
     const { selectedList, availableLists, setSelectedList, setAvailableLists } = useSelectedListProvider();
     const [newListDialogOpen, setNewListDialogOpen] = useState<boolean>(false);
+    const [mergerDialogOpen, setMergerDialogOpen] = useState<boolean>(false);
 
     return <>
         <NewListDialog open={newListDialogOpen} onClose={() => setNewListDialogOpen(false)} onNewList={(name) => {
@@ -74,20 +76,29 @@ function ListSelector() {
                     <Add />
                 </IconButton>
                 {availableLists && Object.keys(availableLists).length > 1 &&
-                    <Tooltip title="Delete List">
-                        <IconButton
-                            onClick={() => {
-                                const newAvailableLists = { ...availableLists };
-                                delete newAvailableLists[selectedList!];
-                                setAvailableLists(newAvailableLists);
-                                setSelectedList(Object.keys(newAvailableLists)[0]);
-                            }}
-                        >
-                            <Delete />
-                        </IconButton>
-                    </Tooltip>
+                    <>
+                        <Tooltip title="Delete List">
+                            <IconButton
+                                onClick={() => {
+                                    const newAvailableLists = { ...availableLists };
+                                    delete newAvailableLists[selectedList!];
+                                    setAvailableLists(newAvailableLists);
+                                    setSelectedList(Object.keys(newAvailableLists)[0]);
+                                }}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Merge Lists">
+                            <IconButton onClick={() => setMergerDialogOpen(true)}>
+                                <CallMerge />
+                            </IconButton>
+                        </Tooltip>
+                    </>
                 }
             </Box>
+
+            <ListMerger open={mergerDialogOpen} onClose={() => setMergerDialogOpen(false)} />
         </Box></>
 }
 
