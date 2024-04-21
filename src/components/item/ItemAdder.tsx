@@ -9,7 +9,7 @@ import { useSelectedListProvider } from "../../contexts/SelectedListProvider"
 
 function ItemAdder() {
     const [currentQuery, setCurrentQuery] = useState<string>("")
- 
+
     const [searchResults, setSearchResults] = useState<Fuzzysort.Results>();
     const [queryFocused, setQueryFocused] = useState<boolean>(false);
 
@@ -98,7 +98,21 @@ function ItemAdder() {
                     }
                 }}
                 onFocus={() => setQueryFocused(true)}
-                onBlur={() => setQueryFocused(false)}
+                onBlur={(e) => {
+                    var attr = null;
+                    var element = e.relatedTarget;
+                    while (element && !attr) {
+                        attr = element.attributes.getNamedItem("itemdata");
+                        element = element.parentElement;
+                    }
+                    setQueryFocused(false);
+
+                    if (attr) {
+                        setCurrentQuery(attr.value);
+                        if (quantityRef)
+                            quantityRef.focus();
+                    }
+                }}
                 onKeyDown={handleEnterKey}
                 inputRef={input => {
                     setQueryRef(input);
@@ -106,10 +120,15 @@ function ItemAdder() {
             />
             {searchResults && queryFocused && currentQuery.length > 0 && searchResults.length > 0 &&
                 !(searchResults.length == 1 && searchResults[0].target.toLowerCase() == currentQuery.toLowerCase()) &&
-                <Paper tabIndex={-1} sx={{ width: 320, maxWidth: '100%', position: "absolute", zIndex: 20 }}>
+                <Paper tabIndex={-1} sx={{ width: 320, maxWidth: '100%', position: "absolute", zIndex: 20 }} >
                     <MenuList tabIndex={-1}>
                         {searchResults.map((result, index) =>
-                            <MenuItem key={index} tabIndex={-1}>
+                            // @ts-ignore
+                            <MenuItem key={index} tabIndex={-1} onClick={() => {
+                                setCurrentQuery(result.target);
+                            }}
+                                itemdata={result.target}
+                            >
                                 <ListItemIcon tabIndex={-1}>
                                     <ItemImage name={result.target} size={ImageSize.THIRTY_TWO} />
                                 </ListItemIcon>
