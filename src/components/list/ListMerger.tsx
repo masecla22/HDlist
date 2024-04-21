@@ -127,8 +127,7 @@ function ListMerger(props: {
             </Grid>
 
             <Box mt={2}>
-                This will {deleteSourceLists ? "move" : "copy"}
-                {sourceLists.map((list) => getAvailableLists()[list].items.map(c => c.amount).reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0)} items
+                This will {deleteSourceLists ? "move" : "copy"} {sourceLists.map((list) => getAvailableLists()[list].items.map(c => c.amount).reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0)} items
                 from {sourceLists.length} lists into {targetList} {deleteSourceLists ? "and delete the original lists" : ""}
                 <br />
                 <br />
