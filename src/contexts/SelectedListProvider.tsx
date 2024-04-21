@@ -97,24 +97,30 @@ function SelectedListProvider(props: { children: React.ReactNode }) {
                     const existingItem = items.find(i => i.item === item.item);
                     if (existingItem) {
                         existingItem.amount = item.amount;
+                        existingItem.multiplierOrPrice = item.multiplierOrPrice;
                     } else {
                         items.push(item);
                     }
-                    console.log(items);
                 }
-                setAvailableLists({ ...availableLists, [selectedList!]: {
-                    ...list,
-                    items
-                } });
+
+                const filteredItems = items.filter(i => i.amount > 0);
+                setAvailableLists({
+                    ...availableLists, [selectedList!]: {
+                        ...list,
+                        items: filteredItems
+                    }
+                });
             },
             removeItemFromList: (item: string) => {
                 const list = selectedList ? availableLists[selectedList] : null;
                 if (!list) return;
                 const items = list.items.filter(i => i.item !== item);
-                setAvailableLists({ ...availableLists, [selectedList!]: {
-                    ...list,
-                    items
-                } });
+                setAvailableLists({
+                    ...availableLists, [selectedList!]: {
+                        ...list,
+                        items
+                    }
+                });
             }
         }}>
             {props.children}
