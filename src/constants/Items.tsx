@@ -73,7 +73,7 @@ const itemPrices = {
     "Stuffed pepppers": 352.8,
     "Spring omelet": 230.4,
     "Flower crown": 331.2,
-    "Cookie cupcake": 712.0,
+    "Cookie cupcake": 712.8,
     "Passion fruit pie": 111.6,
     "Flower shawl": 295.2,
     "Spicy fish": 543.6,
