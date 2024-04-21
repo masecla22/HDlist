@@ -30,6 +30,43 @@ function EditablePriceLabel(props: { price: MultiplierOrPrice, onChange: (newPri
             onChange={(e) => onChange(e.target.value)}
             onBlur={() => setInEditMode(false)}
             inputRef={input => input && input.focus()}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    setInEditMode(false);
+                }
+
+                if (e.key === 'Escape') {
+                    setInEditMode(false);
+                }
+
+                // Remove anything non numerical from the price
+                const priceStr = price.replace(/[^0-9.\-]/g, '');
+                const isMultiplier = price.includes('x') || price.includes('X');
+                const incrementBy = isMultiplier ? 1 : 100;
+
+                // Arrow up 
+                if (e.key === 'ArrowUp') {
+                    const newPrice = parseFloat(priceStr) + incrementBy;
+                    const toReplace = price.replace(priceStr, newPrice.toString());
+
+                    // Replace the old price with the new price
+                    onChange(toReplace);
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                }
+
+                // Arrow down
+                if (e.key === 'ArrowDown') {
+                    const newPrice = parseFloat(priceStr) - incrementBy;
+                    const toReplace = price.replace(priceStr, newPrice.toString());
+
+                    // Replace the old price with the new price
+                    onChange(toReplace);
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }}
         /> :
         <Box onClick={() => setInEditMode(true)}>
             <PriceLabel price={price} />
