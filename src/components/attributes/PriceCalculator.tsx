@@ -63,7 +63,7 @@ function PriceCalculator() {
 
 
     return <Box position="relative">
-        <Typography>
+        <Typography component={'span'}>
             {getPriceDisplay(getSelectedList()!)}
         </Typography>
 
