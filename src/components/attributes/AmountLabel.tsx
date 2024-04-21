@@ -19,6 +19,15 @@ function EditableAmountLabel(props: {
             inputProps={{ type: 'number' }}
             onBlur={() => setInEditMode(false)}
             inputRef={input => input && input.focus()}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    setInEditMode(false)
+                }
+
+                if (e.key === 'Escape') {
+                    setInEditMode(false)
+                }
+            }}
         /> :
         <Box onClick={() => setInEditMode(true)}>
             <AmountLabel amount={amount} />
