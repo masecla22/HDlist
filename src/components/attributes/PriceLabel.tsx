@@ -2,8 +2,8 @@ import { Box, TextField, Typography } from "@mui/material";
 import { MultiplierOrPrice } from "../adder/ItemList";
 import { useState } from "react";
 
-function PriceLabel(props: { price: MultiplierOrPrice }) {
-    const { price } = props;
+function PriceLabel(props: { price: MultiplierOrPrice, defaultPrice?: number }) {
+    const { price, defaultPrice } = props;
 
     // Remove anything non numerical from the price
     const priceStr = price.replace(/[^0-9.\-]/g, '');
@@ -12,7 +12,20 @@ function PriceLabel(props: { price: MultiplierOrPrice }) {
     const isMultiplier = price.includes('x') || price.includes('X');
 
     if (isMultiplier) {
-        return <Typography variant="h5">{priceStr}x</Typography>
+        if (defaultPrice) {
+            return <Box component="span" display="flex" justifyContent="space-between">
+                <Box component="span">
+                    <Typography variant="h5">{priceStr}x</Typography>
+                </Box>
+                <Box component="span" display="flex" alignItems="center">
+                    <Typography variant="h5">&nbsp;({parseInt(priceStr) * defaultPrice!}</Typography>
+                    <img height="20" src="https://static.wikia.nocookie.net/hayday/images/6/6d/Coin.png" />
+                    <Typography variant="h5">)</Typography>
+                </Box>
+            </Box>
+        } else {
+            return <Typography variant="h5">{priceStr}x</Typography>
+        }
     } else {
         return <Box component="span" display="flex" alignItems="center">
             <Typography variant="h5" mr={1}>{priceStr}</Typography>
@@ -21,8 +34,8 @@ function PriceLabel(props: { price: MultiplierOrPrice }) {
     }
 }
 
-function EditablePriceLabel(props: { price: MultiplierOrPrice, onChange: (newPrice: MultiplierOrPrice) => void }) {
-    const { price, onChange } = props;
+function EditablePriceLabel(props: { price: MultiplierOrPrice, defaultPrice: number, onChange: (newPrice: MultiplierOrPrice) => void }) {
+    const { price, onChange, defaultPrice } = props;
     const [inEditMode, setInEditMode] = useState(false);
 
     return inEditMode ?
@@ -53,7 +66,6 @@ function EditablePriceLabel(props: { price: MultiplierOrPrice, onChange: (newPri
                     onChange(toReplace);
                     e.preventDefault();
                     e.stopPropagation();
-
                 }
 
                 // Arrow down
@@ -69,7 +81,7 @@ function EditablePriceLabel(props: { price: MultiplierOrPrice, onChange: (newPri
             }}
         /> :
         <Box onClick={() => setInEditMode(true)}>
-            <PriceLabel price={price} />
+            <PriceLabel price={price} defaultPrice={defaultPrice} />
         </Box>
 }
 
