@@ -60,8 +60,8 @@ def resize_asset(item):
 
 
 # ADD HERE
-items = ["Help"]
+items = ["Diamond"]
 
 for item in items:
-    # download_asset(item)
+    download_asset(item)
     resize_asset(item)
