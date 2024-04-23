@@ -6,6 +6,7 @@ import { EditablePriceLabel } from "../attributes/PriceLabel";
 import { ImageSize } from "./ItemImage";
 import ItemLabel from "./ItemLabel";
 import { useSelectedListProvider } from "../../contexts/SelectedListProvider";
+import itemPrices from "../../constants/Items";
 
 type MultiplierOrPrice = string;
 
@@ -42,10 +43,11 @@ function ItemList() {
                         }} />
                     </Grid>
                     <Grid item xs={4} display="flex" alignItems="center" justifyContent="center">
-                        <EditablePriceLabel price={item.multiplierOrPrice} onChange={(newPrice) => {
-                            console.log(newPrice);
-                            addItemToList({ ...item, multiplierOrPrice: newPrice }, false);
-                        }} />
+                        <EditablePriceLabel price={item.multiplierOrPrice}
+                            defaultPrice={itemPrices[item.item].price}
+                            onChange={(newPrice) => {
+                                addItemToList({ ...item, multiplierOrPrice: newPrice }, false);
+                            }} />
                     </Grid>
                     <Grid item xs={2} display="flex" alignItems="center" justifyContent="flex-end">
                         <Box>
