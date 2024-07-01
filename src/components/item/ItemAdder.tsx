@@ -1,11 +1,12 @@
-import { Add } from "@mui/icons-material"
+import { Add, ImportExport } from "@mui/icons-material"
 import { Box, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, TextField, Tooltip, Typography } from "@mui/material"
+import fuzzysort from "fuzzysort"
 import React, { useEffect, useState } from "react"
+import { useSelectedListProvider } from "../../contexts/SelectedListProvider"
 import searchForItems from "../../search/ItemSearch"
 import ItemImage, { ImageSize } from "../adder/ItemImage"
 import { MultiplierOrPrice } from "../adder/ItemList"
-import fuzzysort from "fuzzysort"
-import { useSelectedListProvider } from "../../contexts/SelectedListProvider"
+import ItemImporter from "./importer/ItemImporter"
 
 function ItemAdder() {
     const [currentQuery, setCurrentQuery] = useState<string>("")
@@ -18,6 +19,8 @@ function ItemAdder() {
 
     const [queryRef, setQueryRef] = useState<HTMLInputElement | null>(null);
     const [quantityRef, setQuantityRef] = useState<HTMLInputElement | null>(null);
+
+    const [openImporter, setOpenImporter] = useState<boolean>(false);
 
     const { addItemToList } = useSelectedListProvider();
 
@@ -172,10 +175,22 @@ function ItemAdder() {
                 You can use Enter to add an item and override it, but if you press CTRL+Enter it'll add the items on top!
             </Typography>
         }>
-            <IconButton>
+            <IconButton onClick={(e) => handleEnterKey({ key: "Enter", ctrlKey: e.ctrlKey } as any)}>
                 <Add />
             </IconButton>
         </Tooltip>
+
+        <Tooltip title={
+            <Typography variant="body2">
+                Use this to import items in bulk!
+            </Typography>
+        }>
+            <IconButton onClick={() => setOpenImporter(true)}>
+                <ImportExport />
+            </IconButton>
+        </Tooltip>
+
+        <ItemImporter open={openImporter} onClose={() => setOpenImporter(false)} />
     </Box>
 }
 
